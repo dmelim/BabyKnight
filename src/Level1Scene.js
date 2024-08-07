@@ -3,6 +3,8 @@ export default class Level1Scene extends Phaser.Scene {
     super({ key: 'Level1Scene' });
     this.jumpCount = 0;
     this.gameOver = false;
+    this.blueBallCollected = false;
+    this.platforms = null;  // Ensure platforms is initialized
   }
 
   preload() {
@@ -11,35 +13,55 @@ export default class Level1Scene extends Phaser.Scene {
     graphics.fillStyle(0xff0000, 1);
     graphics.fillCircle(20, 20, 20);
     graphics.generateTexture('redCircle', 40, 40);
+
+    // Create a blue ball texture
+    graphics.clear();
+    graphics.fillStyle(0x0000ff, 1);
+    graphics.fillCircle(10, 10, 10);
+    graphics.generateTexture('blueBall', 20, 20);
+
+    // Create a brown square texture
+    graphics.fillStyle(0x8B4513, 1);  // Brown color
+    graphics.fillRect(0, 0, 20, 20);
+    graphics.generateTexture('brownSquare', 20, 20);
   }
 
   create() {
-    // Create a green platform texture
-    const platformGraphics = this.make.graphics({ x: 0, y: 0, add: false });
-    platformGraphics.fillStyle(0x00ff00, 1);
-    platformGraphics.fillRect(0, 0, 200, 50);
-    platformGraphics.generateTexture('greenPlatform', 200, 50);
-
-    // Add the platforms as static physics objects
-    const platforms = this.physics.add.staticGroup();
-    platforms.create(400, 575, 'greenPlatform').refreshBody();
-    platforms.create(600, 400, 'greenPlatform').refreshBody();
-    platforms.create(50, 250, 'greenPlatform').refreshBody();
-    platforms.create(750, 220, 'greenPlatform').refreshBody();
+    // Create platforms
+    this.platforms = this.physics.add.staticGroup();
+    this.createPlatform(this.platforms, 110, 1000, 300);
+    this.createPlatform(this.platforms, 300, 700, 250);
+    this.createPlatform(this.platforms, 650, 500, 200);
+    this.createPlatform(this.platforms, 1100, 800, 400);
+    this.createPlatform(this.platforms, 1500, 500, 350);
+    this.createPlatform(this.platforms, 1700, 1000, 150);
 
     // Create the red circle sprite with physics
-    this.redCircle = this.physics.add.sprite(400, 300, 'redCircle');
+    this.redCircle = this.physics.add.sprite(110, 300, 'redCircle');
     this.redCircle.setBounce(0.2);
     this.redCircle.setCollideWorldBounds(true);
     this.redCircle.body.setGravityY(300);
 
     // Add collider between red circle and platforms
-    this.physics.add.collider(this.redCircle, platforms, this.resetJumpCount, null, this);
+    this.physics.add.collider(this.redCircle, this.platforms, this.resetJumpCount, null, this);
 
     // Create an invisible boundary below the screen
-    const boundary = this.add.rectangle(400, 580, 800, 10, 0xff0000, 0);
+    const boundary = this.add.rectangle(960, 1050, 1920, 10, 0xff0000, 0);
     this.physics.add.existing(boundary, true);  // true means it's a static body
     this.physics.add.collider(this.redCircle, boundary, this.triggerGameOver, null, this);
+
+    // Create the blue ball sprite as a static object
+    this.blueBall = this.physics.add.staticSprite(900, 200, 'blueBall');
+
+    // Add overlap detection between red circle and blue ball
+    this.physics.add.overlap(this.redCircle, this.blueBall, this.collectBlueBall, null, this);
+
+    // Create the brown square sprite as a static object
+    this.brownSquare = this.physics.add.staticSprite(1700, 950, 'brownSquare');
+
+    // Add overlap detection between red circle and brown square
+    this.physics.add.overlap(this.redCircle, this.brownSquare, this.collectBrownSquare, null, this);
+
 
     // Add controls
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -50,13 +72,17 @@ export default class Level1Scene extends Phaser.Scene {
     this.gameOverText.setVisible(false);
   }
 
+  clearScene() {
+    if (this.platforms) {
+      this.platforms.clear(true, true);
+    }
+  }
+
   update() {
     if (this.gameOver) {
       console.log("Game over");
       return;
     }
-
-    console.log(`Player position: (${this.redCircle.x}, ${this.redCircle.y})`);
 
     if (this.cursors.left.isDown) {
       this.redCircle.setVelocityX(-160);
@@ -93,4 +119,30 @@ export default class Level1Scene extends Phaser.Scene {
       this.scene.start('MainMenuScene');
     });
   }
+
+  createPlatform(group, x, y, width) {
+    const platformGraphics = this.make.graphics({ x: 0, y: 0, add: false });
+    platformGraphics.fillStyle(0x00ff00, 1);
+    platformGraphics.fillRect(0, 0, width, 50);
+    platformGraphics.generateTexture(`greenPlatform_${x}_${y}`, width, 50);
+
+    group.create(x, y, `greenPlatform_${x}_${y}`).refreshBody();
+  }
+
+  collectBlueBall(player, blueBall) {
+    blueBall.destroy();
+    this.blueBallCollected = true;
+    console.log('Blue ball collected:', this.blueBallCollected);
+  }
+
+  collectBrownSquare(player, brownSquare) {
+  if (this.blueBallCollected) {
+    brownSquare.destroy();
+    console.log('Brown square collected, moving to next scene');
+    this.blueBallCollected = false;
+    this.clearScene()
+    this.scene.start('Level2Scene');
+  }
+}
+
 }

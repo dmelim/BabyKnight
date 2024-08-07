@@ -20,8 +20,8 @@ var endScene = new EndScene();
 // Game configuration
 var config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 1920,
+  height: 1080,
   physics: {
     default: 'arcade',
     arcade: {
@@ -44,4 +44,4 @@ game.scene.add('Level3Scene', level3Scene);
 game.scene.add('EndScene', endScene);
 
 // Start the BootScene
-game.scene.start('BootScene');
+game.scene.start('Level2Scene');
