@@ -1,11 +1,11 @@
-import BootScene from './BootScene.js';
-import PreloadScene from './PreloadScene.js';
-import MainMenuScene from './MainMenuScene.js';
-import IntroScene from './IntroScene.js';
-import Level1Scene from './Level1Scene.js';
-import Level2Scene from './Level2Scene.js';
-import Level3Scene from './Level3Scene.js';
-import EndScene from './EndScene.js';
+import BootScene from "./BootScene.js";
+import PreloadScene from "./PreloadScene.js";
+import MainMenuScene from "./MainMenuScene.js";
+import IntroScene from "./IntroScene.js";
+import Level1Scene from "./Level1Scene.js";
+import Level2Scene from "./Level2Scene.js";
+import Level3Scene from "./Level3Scene.js";
+import EndScene from "./EndScene.js";
 
 // Load our scenes
 var bootScene = new BootScene();
@@ -23,25 +23,25 @@ var config = {
   width: 1920,
   height: 1080,
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       gravity: { y: 300 },
-      debug: false
-    }
-  }
+      debug: false,
+    },
+  },
 };
 
 var game = new Phaser.Game(config);
 
 // Add scenes
-game.scene.add('BootScene', bootScene);
-game.scene.add('PreloadScene', preloadScene);
-game.scene.add('MainMenuScene', mainMenuScene);
-game.scene.add('IntroScene', introScene);
-game.scene.add('Level1Scene', level1Scene);
-game.scene.add('Level2Scene', level2Scene);
-game.scene.add('Level3Scene', level3Scene);
-game.scene.add('EndScene', endScene);
+game.scene.add("BootScene", bootScene);
+game.scene.add("PreloadScene", preloadScene);
+game.scene.add("MainMenuScene", mainMenuScene);
+game.scene.add("IntroScene", introScene);
+game.scene.add("Level1Scene", level1Scene);
+game.scene.add("Level2Scene", level2Scene);
+game.scene.add("Level3Scene", level3Scene);
+game.scene.add("EndScene", endScene);
 
 // Start the BootScene
-game.scene.start('Level2Scene');
+game.scene.start("Level3Scene");
