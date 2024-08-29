@@ -1,5 +1,5 @@
 const BOUNCE_VELOCITY = -300;
-const KILL_THRESHOLD = 5; // Adjust this threshold if needed
+const KILL_THRESHOLD = 5;
 const RANDOM = false;
 
 export default class Level1Scene extends Phaser.Scene {
@@ -8,7 +8,7 @@ export default class Level1Scene extends Phaser.Scene {
     this.jumpCount = 0;
     this.gameOver = false;
     this.keyCollected = false;
-    this.platforms = null; // Ensure platforms is initialized
+    this.platforms = null;
     this.monsters = null;
   }
 
@@ -19,6 +19,8 @@ export default class Level1Scene extends Phaser.Scene {
     this.load.image("platform", "assets/Test.png");
 
     this.load.image("background", "assets/bgCastle1.webp");
+
+    this.load.image("item", "assets/pacifier.png");
 
     this.load.spritesheet("player", "assets/knight.png", {
       frameWidth: 100,
@@ -31,9 +33,18 @@ export default class Level1Scene extends Phaser.Scene {
   }
 
   create() {
-    // Create platforms
+    this.cheatKey1 = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SHIFT
+    );
+    this.cheatKey2 = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.S
+    );
+    this.cheatKey3 = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.K
+    );
+
     this.add
-      .image(960, 540, "background")
+      .image(961, 540, "background")
       .setOrigin(0.5, 0.5)
       .setScale(1.2)
       .setTint(0x303030);
@@ -46,14 +57,13 @@ export default class Level1Scene extends Phaser.Scene {
     this.createPlatform(this.platforms, 1500, 500);
     this.createPlatform(this.platforms, 1700, 1000);
 
-    // Create the red circle sprite with physics
     this.redCircle = this.physics.add.sprite(110, 300, "player");
     this.redCircle.setBounce(0.2).setScale(3);
     this.redCircle.setCollideWorldBounds(true);
     this.redCircle.body
       .setGravityY(300)
       .setSize(this.redCircle.width * 0.1, this.redCircle.height * 0.1);
-    // Add collider between red circle and platforms
+
     this.physics.add.collider(
       this.redCircle,
       this.platforms,
@@ -62,9 +72,8 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    // Create an invisible boundary below the screen
     const boundary = this.add.rectangle(960, 1050, 1920, 10, 0xff0000, 0);
-    this.physics.add.existing(boundary, true); // true means it's a static body
+    this.physics.add.existing(boundary, true);
     this.physics.add.collider(
       this.redCircle,
       boundary,
@@ -73,8 +82,7 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    // Create the blue ball sprite as a static object
-    this.key = this.physics.add.staticSprite(900, 200, "key");
+    this.key = this.physics.add.staticSprite(901, 200, "key");
     this.tweens.add({
       targets: this.key,
       y: this.key.y - 10,
@@ -87,7 +95,6 @@ export default class Level1Scene extends Phaser.Scene {
     this.key.body.setSize(this.key.width * 0.1, this.key.height * 0.1);
     this.key.body.setOffset(this.key.width * 0.4, this.key.height * 0.4);
 
-    // Add overlap detection between red circle and blue ball
     this.physics.add.overlap(
       this.redCircle,
       this.key,
@@ -96,13 +103,11 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    // Create the brown square sprite as a static object
     this.chest = this.physics.add.staticSprite(1700, 940, "chest");
     this.chest.setScale(0.2);
     this.chest.body.setSize(this.chest.width * 0.1, this.chest.height * 0.1);
     this.chest.body.setOffset(this.chest.width * 0.4, this.chest.height * 0.4);
 
-    // Add overlap detection between red circle and brown square
     this.physics.add.overlap(
       this.redCircle,
       this.chest,
@@ -111,27 +116,24 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    // Create animationsF
     this.anims.create({
       key: "monster_walk",
       frames: this.anims.generateFrameNumbers("monster", { start: 0, end: 8 }),
       frameRate: 10,
       repeat: -1,
     });
-    // Create monsters group as a static group
+
     this.monsters = this.physics.add.group();
     this.createMonster(this.monsters, 300, 300);
     this.createMonster(this.monsters, 700, 700);
 
-    // Set initial velocity for monsters
     this.monsters.children.iterate((monster) => {
-      monster.body.setAllowGravity(false); // Disable gravity for monsters
-      monster.setVelocityX(200); // Move to the right with velocity 50
+      monster.body.setAllowGravity(false);
+      monster.setVelocityX(200);
       monster.body.setCollideWorldBounds(true);
-      monster.body.setBounce(1, 0); // Bounce back when hitting the bounds
+      monster.body.setBounce(1, 0);
     });
 
-    // Add collider between player and monsters
     this.physics.add.collider(
       this.redCircle,
       this.monsters,
@@ -140,15 +142,24 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    // Add controls
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    // Add Game Over text (hidden initially)
-    this.gameOverText = this.add.text(400, 300, "Game Over", {
-      fontSize: "64px",
+    this.gameOverText = this.add.text(960, 540, "Game Over", {
+      fontSize: "128px",
       fill: "#ff0000",
+      fontStyle: "bold",
+      stroke: "#000000",
+      strokeThickness: 8,
     });
-    this.gameOverText.setOrigin(0.5);
+    this.gameOverText.setOrigin(0.5, 0.5);
+    this.tweens.add({
+      targets: this.gameOverText,
+      x: 960,
+      duration: 2000,
+      ease: "Power2",
+      yoyo: true,
+      repeat: -1,
+    });
     this.gameOverText.setVisible(false);
   }
 
@@ -160,10 +171,16 @@ export default class Level1Scene extends Phaser.Scene {
 
   update() {
     if (this.gameOver) {
-      console.log("Game over");
       return;
     }
-
+    if (
+      this.cheatKey1.isDown &&
+      this.cheatKey2.isDown &&
+      this.cheatKey3.isDown
+    ) {
+      console.log("Cheat activated! Skipping to next level...");
+      this.scene.start("Level2Scene");
+    }
     if (this.cursors.left.isDown) {
       this.redCircle.setVelocityX(-160);
     } else if (this.cursors.right.isDown) {
@@ -189,11 +206,9 @@ export default class Level1Scene extends Phaser.Scene {
   createMonster(group, x, y, minSpeed) {
     const monster = group.create(x, y, "monster");
 
-    // Adjust the physics body to fit the non-transparent area
-    monster.body.setSize(monster.width * 0.6, monster.height * 0.6); // Example scaling
-    monster.body.setOffset(monster.width * 0.2, monster.height * 0.5); // Example offset
+    monster.body.setSize(monster.width * 0.6, monster.height * 0.6);
+    monster.body.setOffset(monster.width * 0.2, monster.height * 0.5);
 
-    // Other settings (e.g., gravity, velocity)
     monster.body.setAllowGravity(false);
     monster.setVelocityX(200);
     monster.setCollideWorldBounds(true);
@@ -208,17 +223,14 @@ export default class Level1Scene extends Phaser.Scene {
       player.body.touching.down &&
       monster.body.touching.up
     ) {
-      console.log("Player killed the monster!");
-      monster.destroy(); // Destroy the monster
-      player.setVelocityY(BOUNCE_VELOCITY); // Bounce the player
+      monster.destroy();
+      player.setVelocityY(BOUNCE_VELOCITY);
     } else {
-      console.log("Player hit by monster! Game over.");
       this.triggerGameOver();
     }
   }
 
   triggerGameOver() {
-    console.log("Game Over Triggered");
     this.gameOver = true;
     this.redCircle.setTint(0xff0000);
     this.redCircle.setVelocity(0, 0);
@@ -226,7 +238,7 @@ export default class Level1Scene extends Phaser.Scene {
 
     this.input.once("pointerdown", () => {
       this.gameOver = false;
-      this.scene.start("MainMenuScene");
+      this.scene.start("Level1Scene");
     });
   }
 
@@ -239,15 +251,35 @@ export default class Level1Scene extends Phaser.Scene {
   collectKey(player, key) {
     key.destroy();
     this.keyCollected = true;
-    console.log("Blue ball collected:", this.keyCollected);
   }
 
   collectChest(player, chest) {
     if (this.keyCollected) {
       chest.destroy();
       this.keyCollected = false;
-      this.clearScene();
-      this.scene.start("Level2Scene");
+
+      const item = this.add.sprite(chest.x, chest.y, "item");
+      item.setScale(0.1);
+
+      this.tweens.add({
+        targets: item,
+        y: item.y - 100,
+        duration: 1000,
+        ease: "Power2",
+        onComplete: () => {
+          this.tweens.add({
+            targets: item,
+            alpha: 0,
+            duration: 1000,
+            ease: "Power2",
+            onComplete: () => {
+              item.destroy();
+              this.clearScene();
+              this.scene.start("Level2Scene");
+            },
+          });
+        },
+      });
     }
   }
 }
