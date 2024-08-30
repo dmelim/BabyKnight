@@ -5,9 +5,9 @@ export default class EndScene extends Phaser.Scene {
 
   preload() {
     // Load the images
-    this.load.image("item1", "assets/pacifier.png");
-    this.load.image("item2", "assets/babyBottle.png");
-    this.load.image("item3", "assets/bearTree.png");
+    this.load.image("pacifier1", "assets/pacifier.png");
+    this.load.image("babyBottle2", "assets/babyBottle.png");
+    this.load.image("bearTree3", "assets/bearTree.png");
   }
 
   create() {
@@ -44,22 +44,22 @@ export default class EndScene extends Phaser.Scene {
     const spacing = 200; // Horizontal spacing between images
     const centerX = this.cameras.main.width / 2;
 
-    const item1 = this.add
-      .image(centerX - spacing, imageYPosition, "item1")
+    const pacifier1 = this.add
+      .image(centerX - spacing, imageYPosition, "pacifier1")
       .setAlpha(0)
       .setScale(0.15);
-    const item2 = this.add
-      .image(centerX, imageYPosition, "item2")
+    const babyBottle2 = this.add
+      .image(centerX, imageYPosition, "babyBottle2")
       .setAlpha(0)
       .setScale(0.15);
-    const item3 = this.add
-      .image(centerX + spacing, imageYPosition, "item3")
+    const bearTree3 = this.add
+      .image(centerX + spacing, imageYPosition, "bearTree3")
       .setAlpha(0)
       .setScale(0.15);
 
     // Tween for the first image
     this.tweens.add({
-      targets: item1,
+      targets: pacifier1,
       alpha: 1,
       duration: 1000,
       ease: "Power2",
@@ -68,7 +68,7 @@ export default class EndScene extends Phaser.Scene {
 
     // Tween for the second image
     this.tweens.add({
-      targets: item2,
+      targets: babyBottle2,
       alpha: 1,
       duration: 1000,
       ease: "Power2",
@@ -77,7 +77,7 @@ export default class EndScene extends Phaser.Scene {
 
     // Tween for the third image
     this.tweens.add({
-      targets: item3,
+      targets: bearTree3,
       alpha: 1,
       duration: 1000,
       ease: "Power2",
