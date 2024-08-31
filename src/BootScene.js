@@ -14,7 +14,7 @@ export default class BootScene extends Phaser.Scene {
   create() {
     const background = this.add.image(960, 540, "backgroundImage");
     background.setAlpha(0);
-
+    // Comment
     this.tweens.add({
       targets: background,
       alpha: 1,
