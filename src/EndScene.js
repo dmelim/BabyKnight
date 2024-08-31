@@ -5,9 +5,9 @@ export default class EndScene extends Phaser.Scene {
 
   preload() {
     // Load the images
-    this.load.image("pacifier1", "assets/pacifier.png");
-    this.load.image("babyBottle2", "assets/babyBottle.png");
-    this.load.image("bearTree3", "assets/bearTree.png");
+    this.load.image("pacifier1", "assets/src/pacifier.png");
+    this.load.image("babyBottle2", "assets/src/babyBottle.png");
+    this.load.image("bearTree3", "assets/src/bearTree.png");
   }
 
   create() {
