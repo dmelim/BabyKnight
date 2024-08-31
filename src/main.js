@@ -40,4 +40,4 @@ game.scene.add("Level3Scene", level3Scene);
 game.scene.add("EndScene", endScene);
 game.scene.add("FinalConversation", finalConv);
 
-game.scene.start("FinalConversation");
+game.scene.start("BootScene");
