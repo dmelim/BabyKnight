@@ -6,14 +6,14 @@ export default class FinalConversation extends Phaser.Scene {
 
   preload() {
     // Preload the images
-    this.load.image("conversationBg", "assets/src/ConversationBG.jpg");
-    this.load.image("conversationDiogo", "assets/src/ConversationDiogo.png");
-    this.load.image("conversationKnight", "assets/src/ConversationKnight.png");
-    this.load.image("blackScreen", "assets/src/blackbg.png");
+    this.load.image("conversationBg", "src/assets/ConversationBG.jpg");
+    this.load.image("conversationDiogo", "src/assets/ConversationDiogo.png");
+    this.load.image("conversationKnight", "src/assets/ConversationKnight.png");
+    this.load.image("blackScreen", "src/assets/blackbg.png");
 
-    this.load.image("pacifier", "assets/src/pacifier.png");
-    this.load.image("babyBottle", "assets/src/babyBottle.png");
-    this.load.image("bearTree", "assets/src/bearTree.png");
+    this.load.image("pacifier", "src/assets/pacifier.png");
+    this.load.image("babyBottle", "src/assets/babyBottle.png");
+    this.load.image("bearTree", "src/assets/bearTree.png");
   }
 
   create() {

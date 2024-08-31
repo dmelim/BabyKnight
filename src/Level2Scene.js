@@ -10,20 +10,20 @@ export default class Level2Scene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("chest", "assets/src/chest.png");
-    this.load.image("key", "assets/src/key.png");
+    this.load.image("chest", "src/assets/chest.png");
+    this.load.image("key", "src/assets/key.png");
 
-    this.load.image("platform", "assets/src/Test.png");
+    this.load.image("platform", "src/assets/Test.png");
 
-    this.load.image("background1", "assets/src/bgCastle.webp");
+    this.load.image("background1", "src/assets/bgCastle.webp");
 
-    this.load.image("item1", "assets/src/babyBottle.png");
+    this.load.image("item1", "src/assets/babyBottle.png");
 
-    this.load.spritesheet("player", "assets/src/knight.png", {
+    this.load.spritesheet("player", "src/assets/knight.png", {
       frameWidth: 100,
       frameHeight: 100,
     });
-    this.load.spritesheet("monster", "assets/src/slime_green.png", {
+    this.load.spritesheet("monster", "src/assets/slime_green.png", {
       frameWidth: 24,
       frameHeight: 24,
     });
