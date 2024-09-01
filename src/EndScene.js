@@ -97,7 +97,7 @@ export default class EndScene extends Phaser.Scene {
       .setOrigin(0.5); // Align to the center
 
     this.input.on("pointerdown", () => {
-      this.scene.start("FinalConversation");
+      this.scene.start("MiddleEndScene");
     });
   }
 }

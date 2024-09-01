@@ -5,6 +5,7 @@ import Level2Scene from "./Level2Scene.js";
 import Level3Scene from "./Level3Scene.js";
 import EndScene from "./EndScene.js";
 import FinalConversation from "./FinalConversation.js";
+import MiddleEndScene from "./MiddleEndScene.js";
 
 var bootScene = new BootScene();
 var introScene = new IntroScene();
@@ -12,6 +13,7 @@ var level1Scene = new Level1Scene();
 var level2Scene = new Level2Scene();
 var level3Scene = new Level3Scene();
 var endScene = new EndScene();
+var middleEnd = new MiddleEndScene();
 var finalConv = new FinalConversation();
 
 var config = {
@@ -38,6 +40,7 @@ game.scene.add("Level1Scene", level1Scene);
 game.scene.add("Level2Scene", level2Scene);
 game.scene.add("Level3Scene", level3Scene);
 game.scene.add("EndScene", endScene);
+game.scene.add("MiddleEndScene", middleEnd);
 game.scene.add("FinalConversation", finalConv);
 
 game.scene.start("BootScene");
